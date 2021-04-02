@@ -1,24 +1,24 @@
 {
   "devDependencies": {
-    "eslint": "^7.23.0",
+    "@open-wc/building-rollup": "^1.9.4",
     "@open-wc/eslint-config": "^4.2.0",
-    "@typescript-eslint/parser": "^4.20.0",
+    "@open-wc/testing": "^2.5.32",
     "@typescript-eslint/eslint-plugin": "^4.20.0",
-    "prettier": "^2.2.1",
+    "@typescript-eslint/parser": "^4.20.0",
+    "@web/dev-server": "^0.1.10",
+    "@web/dev-server-storybook": "^0.3.5",
+    "@web/test-runner": "^0.12.18",
+    "concurrently": "^5.3.0",
+    "deepmerge": "^4.2.2",
+    "eslint": "^7.23.0",
     "eslint-config-prettier": "^7.2.0",
     "husky": "^4.3.8",
     "lint-staged": "^10.5.4",
-    "@web/test-runner": "^0.12.18",
-    "@open-wc/testing": "^2.5.32",
-    "@web/dev-server-storybook": "^0.3.5",
-    "@open-wc/building-rollup": "^1.9.4",
-    "deepmerge": "^4.2.2",
+    "prettier": "^2.2.1",
     "rimraf": "^3.0.2",
     "rollup": "^2.44.0",
-    "@web/dev-server": "^0.1.10",
-    "concurrently": "^5.3.0",
-    "typescript": "^4.2.3",
-    "tslib": "^2.1.0"
+    "tslib": "^2.1.0",
+    "typescript": "^4.2.3"
   },
   "scripts": {
     "lint": "eslint --ext .ts,.html . --ignore-path .gitignore && prettier \"**/*.ts\" --check --ignore-path .gitignore",
@@ -28,8 +28,8 @@
     "storybook": "tsc && concurrently -k -r \"tsc --watch --preserveWatchOutput\" \"wds -c .storybook/server.mjs\"",
     "storybook:build": "tsc && build-storybook",
     "build": "rimraf dist && tsc && rollup -c rollup.config.js",
-    "start:build": "npm run build && web-dev-server --root-dir dist --app-index index.html --open --compatibility none",
-    "start": "tsc && concurrently -k -r \"tsc --watch --preserveWatchOutput\" \"wds\""
+    "start:build": "npm run build && wds --app-index index.html --open",
+    "start": "tsc && concurrently -k -r \"tsc --watch --preserveWatchOutput\" \"wds --app-index index.html --open\""
   },
   "name": "my-project",
   "version": "0.0.0",
@@ -37,32 +37,9 @@
   "author": "my-project",
   "license": "MIT",
   "dependencies": {
-    "lit-html": "^1.3.0",
-    "lit-element": "^2.4.0"
-  },
-  "eslintConfig": {
-    "parser": "@typescript-eslint/parser",
-    "extends": [
-      "@open-wc/eslint-config",
-      "eslint-config-prettier"
-    ],
-    "plugins": [
-      "@typescript-eslint"
-    ],
-    "rules": {
-      "no-unused-vars": "off",
-      "@typescript-eslint/no-unused-vars": [
-        "error"
-      ],
-      "import/no-unresolved": "off",
-      "import/extensions": [
-        "error",
-        "always",
-        {
-          "ignorePackages": true
-        }
-      ]
-    }
+    "lit-element": "^2.4.0",
+    "lit-element-router": "^2.0.3",
+    "lit-html": "^1.3.0"
   },
   "prettier": {
     "singleQuote": true,

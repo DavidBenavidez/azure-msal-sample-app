@@ -1,5 +1,5 @@
 import { html, TemplateResult } from 'lit-html';
-import '../src/my-project.js';
+import '../src/MyProject.js';
 
 export default {
   title: 'MyProject',
@@ -10,9 +10,9 @@ export default {
 };
 
 interface Story<T> {
-  (args: T): TemplateResult;
   args?: Partial<T>;
   argTypes?: Record<string, unknown>;
+  (args: T): TemplateResult;
 }
 
 interface ArgTypes {
@@ -20,9 +20,7 @@ interface ArgTypes {
   backgroundColor?: string;
 }
 
-const Template: Story<ArgTypes> = ({ title, backgroundColor = 'white' }: ArgTypes) => html`
-  <my-project style="--my-project-background-color: ${backgroundColor}" .title=${title}></my-project>
-`;
+const Template: Story<ArgTypes> = () => html` <my-project></my-project> `;
 
 export const App = Template.bind({});
 App.args = {

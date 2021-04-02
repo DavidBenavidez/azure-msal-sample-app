@@ -1,78 +1,42 @@
-import { LitElement, html, css, property } from 'lit-element';
-import { openWcLogo } from './open-wc-logo.js';
+import { LitElement, html, property, TemplateResult } from 'lit-element';
+import { router } from 'lit-element-router';
 
+import { ROUTER_CONFIG } from './config';
+
+import './components/router-outlet';
+
+interface PageConfig {
+  import: () => void;
+}
+
+@router
 export class MyProject extends LitElement {
+  static routes = ROUTER_CONFIG;
+
   @property({ type: String }) title = 'My app';
+  @property({ type: String }) route = '';
+  @property({ type: Object }) params = {};
+  @property({ type: Object }) query = {};
 
-  static styles = css`
-    :host {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      font-size: calc(10px + 2vmin);
-      color: #1a2b42;
-      max-width: 960px;
-      margin: 0 auto;
-      text-align: center;
-      background-color: var(--my-project-background-color);
-    }
+  router(
+    route: string,
+    params: Record<string, string>,
+    query: Record<string, string>,
+    data: PageConfig
+  ): void {
+    data.import();
 
-    main {
-      flex-grow: 1;
-    }
+    this.route = route;
+    this.params = params;
+    this.query = query;
+  }
 
-    .logo > svg {
-      margin-top: 36px;
-      animation: app-logo-spin infinite 20s linear;
-    }
-
-    @keyframes app-logo-spin {
-      from {
-        transform: rotate(0deg);
-      }
-      to {
-        transform: rotate(360deg);
-      }
-    }
-
-    .app-footer {
-      font-size: calc(12px + 0.5vmin);
-      align-items: center;
-    }
-
-    .app-footer a {
-      margin-left: 5px;
-    }
-  `;
-
-  render() {
+  render(): TemplateResult {
     return html`
-      <main>
-        <div class="logo">${openWcLogo}</div>
-        <h1>${this.title}</h1>
-
-        <p>Edit <code>src/MyProject.ts</code> and save to reload.</p>
-        <a
-          class="app-link"
-          href="https://open-wc.org/guides/developing-components/code-examples"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Code examples
-        </a>
-      </main>
-
-      <p class="app-footer">
-        🚽 Made with love by
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://github.com/open-wc"
-          >open-wc</a
-        >.
-      </p>
+      <router-outlet active-route=${this.route}>
+        <home-page route="home"></home-page>
+        <about-page route="about"></about-page>
+      </router-outlet>
     `;
   }
 }
