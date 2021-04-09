@@ -4,8 +4,7 @@ import { router, navigator } from 'lit-element-router';
 // Style
 import { style } from './MyProject.style';
 
-// Components
-import './components/app-link';
+// Component
 import './components/router-outlet';
 import './components/loader-spinner';
 import './pages/login-page';
