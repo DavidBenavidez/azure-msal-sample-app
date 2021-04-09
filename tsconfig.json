@@ -1,5 +1,4 @@
 {
-  "extends": "./tsconfig.base.json",
   "compilerOptions": {
     "target": "es2018",
     "module": "esnext",
@@ -17,5 +16,8 @@
     "rootDir": "./",
     "incremental": true
   },
-  "include": ["**/*.ts"]
+  "include": [
+    "**/*.ts",
+    "**/assets/*"
+  ]
 }

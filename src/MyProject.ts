@@ -1,28 +1,50 @@
 import { LitElement, html, property, TemplateResult } from 'lit-element';
-import { router } from 'lit-element-router';
+import { router, navigator } from 'lit-element-router';
 
-import { getAccessTokenSilent } from './auth/auth';
-import { ROUTER_CONFIG } from './config';
+// Style
+import { style } from './MyProject.style';
+
+// Components
+import './components/app-link';
 import './components/router-outlet';
 import './components/loader-spinner';
 import './pages/login-page';
+
+// Utils
+import { getAccessTokenSilent, signOut } from './auth/auth';
+import { ROUTER_CONFIG } from './config';
 
 type PageConfig = {
   import: () => void;
 };
 
 @router
-export class MyProject extends LitElement {
+export class MyProject extends navigator(LitElement) {
+  static styles = style;
   static routes = ROUTER_CONFIG;
 
-  @property({ type: Boolean }) isLoading = false;
-  @property({ type: Boolean }) isLoggedIn = false;
-  @property({ type: Object }) params = {};
-  @property({ type: Object }) query = {};
-  @property({ type: String }) route = '';
-  @property({ type: String }) title = 'Sample App';
+  @property({ type: Object })
+  params = {};
 
-  async firstUpdated() {
+  @property({ type: Object })
+  query = {};
+
+  @property({ type: String })
+  readonly title = 'Sample App';
+
+  @property({ type: Boolean })
+  private isLoading = false;
+
+  @property({ type: Boolean })
+  private isLoggedIn = false;
+
+  @property({ type: String })
+  private loaderMessage = '';
+
+  @property({ type: String })
+  private route = '';
+
+  async firstUpdated(): Promise<void> {
     await this.checkIfLoggedIn();
   }
 
@@ -41,16 +63,19 @@ export class MyProject extends LitElement {
 
   render(): TemplateResult {
     if (this.isLoading) {
-      return html` <loader-spinner></loader-spinner> `;
+      return html`
+        <loader-spinner .message=${this.loaderMessage}></loader-spinner>
+      `;
     }
 
     if (!this.isLoggedIn) {
       return html`
-        <login-page @verify-login=${this.checkIfLoggedIn}></login-page>
+        <login-page @verify-login=${this.handleSignIn}></login-page>
       `;
     }
 
     return html`
+      ${this.renderHeader()}
       <router-outlet active-route=${this.route}>
         <home-page route="home"></home-page>
         <about-page route="about"></about-page>
@@ -58,7 +83,35 @@ export class MyProject extends LitElement {
     `;
   }
 
-  private async checkIfLoggedIn() {
+  private renderHeader(): TemplateResult {
+    return html`
+      <header>
+        <nav>
+          <section class="tabs">
+            <button
+              @click="${() => this.navigate('/')}"
+              class="tab"
+              ?active=${this.route === 'home'}
+            >
+              Home
+            </button>
+            <button
+              @click="${() => this.navigate('/about')}"
+              class="tab"
+              ?active=${this.route === 'about'}
+            >
+              About
+            </button>
+            <div @click=${this.handleSignOut} class="tab sign-out">
+              Sign Out
+            </div>
+          </section>
+        </nav>
+      </header>
+    `;
+  }
+
+  private async checkIfLoggedIn(): Promise<void> {
     this.isLoading = true;
 
     try {
@@ -70,5 +123,15 @@ export class MyProject extends LitElement {
     } finally {
       this.isLoading = false;
     }
+  }
+
+  private handleSignIn(): void {
+    this.loaderMessage = 'Verifying login...';
+    this.checkIfLoggedIn();
+  }
+
+  private handleSignOut(): void {
+    this.navigate('/');
+    signOut();
   }
 }

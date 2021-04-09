@@ -7,29 +7,29 @@ import { EndSessionRequest, SilentRequest } from '@azure/msal-browser';
 
 import { tokenRequest } from './authConfig';
 
-export function getAccountId() {
-  return window.myMSALObj.getAllAccounts()[0].homeAccountId;
+export function getAccountId(): string {
+  return window.myMSALObj.getAllAccounts()[0]?.homeAccountId;
 }
 
-export async function signIn() {
+export async function signIn(): Promise<void> {
   await window.myMSALObj.loginPopup().catch(function (error: Error) {
     console.log('Error on account sign in: ', error);
   });
 }
 
-export function signOut() {
+export function signOut(): void {
   const currentAcc = window.myMSALObj.getAccountByHomeId(getAccountId());
   window.myMSALObj.logout(currentAcc as EndSessionRequest);
 }
 
-export function getAccessTokenPopup() {
+export function getAccessTokenPopup(): void {
   const request = tokenRequest;
   window.myMSALObj.acquireTokenPopup(request).catch((error: Error) => {
     console.log(error);
   });
 }
 
-export async function getAccessTokenSilent() {
+export async function getAccessTokenSilent(): Promise<void> {
   const requestWithAccount = {
     ...tokenRequest,
     account: window.myMSALObj.getAccountByHomeId(getAccountId()),
