@@ -9,19 +9,28 @@ export const style = css`
     font-size: 1rem;
   }
 
+  img {
+    max-height: 7vh;
+  }
+
   main {
     display: flex;
     flex-flow: column wrap;
     justify-content: space-evenly;
     align-items: center;
     height: 50vh;
-    width: 30vh;
+    width: 40vh;
     box-shadow: 0 0 10px #aaa;
     overflow: auto;
   }
 
-  img {
-    max-height: 7vh;
+  paper-button {
+    width: 80%;
+    background-color: #2483c5;
+    color: #f4ede6;
+    text-transform: none;
+    font-size: 1rem;
+    margin: 10px;
   }
 
   .label-container {
@@ -34,9 +43,11 @@ export const style = css`
     font-weight: bold;
   }
 
-  paper-button {
-    width: 80%;
-    background-color: #2483c5;
-    color: #f4ede6;
+  .login-buttons__container {
+    display: flex;
+    flex-flow: column wrap;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 100%;
   }
 `;

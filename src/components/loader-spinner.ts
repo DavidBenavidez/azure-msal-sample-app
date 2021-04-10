@@ -14,15 +14,8 @@ export class LoaderSpinner extends LitElement {
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-direction: column;
       height: 100vh;
-    }
-
-    main {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-flow: column wrap;
-      width: 20vw;
     }
 
     .loader {
@@ -65,10 +58,8 @@ export class LoaderSpinner extends LitElement {
 
   render(): TemplateResult {
     return html`
-      <main>
-        <div class="loader loader--black"></div>
-        <span class="message">${this.message}</span>
-      </main>
+      <div class="loader"></div>
+      <span class="message">${this.message}</span>
     `;
   }
 }

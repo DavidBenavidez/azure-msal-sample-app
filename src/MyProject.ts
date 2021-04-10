@@ -1,16 +1,14 @@
 import { LitElement, html, property, TemplateResult } from 'lit-element';
-import { router, navigator } from 'lit-element-router';
-
-// Style
-import { style } from './MyProject.style';
+import { router } from 'lit-element-router';
 
 // Component
-import './components/router-outlet';
 import './components/loader-spinner';
+import './components/nav-bar';
+import './components/router-outlet';
 import './pages/login-page';
 
 // Utils
-import { getAccessTokenSilent, signOut } from './auth/auth';
+import { getAccessTokenSilent } from './auth/auth';
 import { ROUTER_CONFIG } from './config';
 
 type PageConfig = {
@@ -18,8 +16,7 @@ type PageConfig = {
 };
 
 @router
-export class MyProject extends navigator(LitElement) {
-  static styles = style;
+export class MyProject extends LitElement {
   static routes = ROUTER_CONFIG;
 
   @property({ type: Object })
@@ -85,27 +82,7 @@ export class MyProject extends navigator(LitElement) {
   private renderHeader(): TemplateResult {
     return html`
       <header>
-        <nav>
-          <section class="tabs">
-            <button
-              @click="${() => this.navigate('/')}"
-              class="tab"
-              ?active=${this.route === 'home'}
-            >
-              Home
-            </button>
-            <button
-              @click="${() => this.navigate('/about')}"
-              class="tab"
-              ?active=${this.route === 'about'}
-            >
-              About
-            </button>
-            <div @click=${this.handleSignOut} class="tab sign-out">
-              Sign Out
-            </div>
-          </section>
-        </nav>
+        <nav-bar .route=${this.route}> </nav-bar>
       </header>
     `;
   }
@@ -127,10 +104,5 @@ export class MyProject extends navigator(LitElement) {
   private handleSignIn(): void {
     this.loaderMessage = 'Verifying login...';
     this.checkIfLoggedIn();
-  }
-
-  private handleSignOut(): void {
-    this.navigate('/');
-    signOut();
   }
 }
