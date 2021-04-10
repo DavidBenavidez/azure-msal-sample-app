@@ -4,7 +4,7 @@ import { style } from '../styles/LoginPage.style';
 
 import '@polymer/paper-button';
 
-import { signIn } from '../auth/auth';
+import { signInPopup, signInRedirect } from '../auth/auth';
 
 @customElement('login-page')
 export class LoginPage extends LitElement {
@@ -36,7 +36,15 @@ export class LoginPage extends LitElement {
    */
   private async handleLoginPopup(): Promise<void> {
     try {
-      await signIn();
+      this.dispatchEvent(
+        new CustomEvent('toggle-loading', {
+          bubbles: true,
+          composed: true,
+          detail: true,
+        })
+      );
+
+      await signInPopup();
       console.log('Logged in successfully. Attempting to acquire token again');
 
       this.dispatchEvent(
@@ -56,15 +64,15 @@ export class LoginPage extends LitElement {
    */
   private async handleLoginRedirect(): Promise<void> {
     try {
-      await signIn();
-      console.log('Logged in successfully. Attempting to acquire token again');
-
       this.dispatchEvent(
-        new CustomEvent('verify-login', {
+        new CustomEvent('toggle-loading', {
           bubbles: true,
           composed: true,
+          detail: true,
         })
       );
+
+      await signInRedirect();
     } catch (error) {
       console.log('Login Failed: ', error);
     }

@@ -15,6 +15,10 @@ type PageConfig = {
   import: () => void;
 };
 
+interface EventPayload {
+  detail: unknown;
+}
+
 @router
 export class MyProject extends LitElement {
   static routes = ROUTER_CONFIG;
@@ -66,7 +70,10 @@ export class MyProject extends LitElement {
 
     if (!this.isLoggedIn) {
       return html`
-        <login-page @verify-login=${this.handleSignIn}></login-page>
+        <login-page
+          @verify-login=${this.handleSignIn}
+          @toggle-loading=${this.handleLoginButtonClick}
+        ></login-page>
       `;
     }
 
@@ -99,6 +106,11 @@ export class MyProject extends LitElement {
     } finally {
       this.isLoading = false;
     }
+  }
+
+  private handleLoginButtonClick(e: Event & EventPayload) {
+    this.isLoading = e.detail as boolean;
+    this.loaderMessage = 'Waiting for login...';
   }
 
   private handleSignIn(): void {

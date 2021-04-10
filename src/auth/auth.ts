@@ -11,10 +11,21 @@ export function getAccountId(): string {
   return window.myMSALObj.getAllAccounts()[0]?.homeAccountId;
 }
 
-export async function signIn(): Promise<void> {
-  await window.myMSALObj.loginPopup().catch(function (error: Error) {
-    console.log('Error on account sign in: ', error);
-  });
+export async function signInPopup(): Promise<void> {
+  try {
+    const response = await window.myMSALObj.loginPopup();
+    console.log('Successfully logged in via Popup. Response: ', response);
+  } catch (error) {
+    console.log('Error on account popup sign in: ', error);
+  }
+}
+
+export async function signInRedirect(): Promise<void> {
+  try {
+    await window.myMSALObj.loginRedirect();
+  } catch (error) {
+    console.log('Error on account redirect sign in: ', error);
+  }
 }
 
 export function signOut(): void {
@@ -22,17 +33,12 @@ export function signOut(): void {
   window.myMSALObj.logout(currentAcc as EndSessionRequest);
 }
 
-export function getAccessTokenPopup(): void {
-  const request = tokenRequest;
-  window.myMSALObj.acquireTokenPopup(request).catch((error: Error) => {
-    console.log(error);
-  });
-}
-
 export async function getAccessTokenSilent(): Promise<void> {
+  const account = await window.myMSALObj.getAccountByHomeId(getAccountId());
+
   const requestWithAccount = {
     ...tokenRequest,
-    account: window.myMSALObj.getAccountByHomeId(getAccountId()),
+    account,
   };
 
   try {
