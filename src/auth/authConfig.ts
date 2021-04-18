@@ -14,11 +14,11 @@ export const msalConfig = {
   },
 };
 
-type TokenRequest = {
+interface TokenRequest {
   scopes: string[];
   forceRefresh: boolean;
   account?: AccountInfo;
-};
+}
 
 // Add here scopes for id token to be used at MS Identity Platform endpoints.
 export const tokenRequest: TokenRequest = {

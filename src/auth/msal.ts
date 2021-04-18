@@ -8,10 +8,11 @@ import { msalConfig } from './authConfig';
 // Create the main myMSALObj instance
 // configuration parameters are located at authConfig.js
 window.myMSALObj = new PublicClientApplication(msalConfig) || {};
+
 // Register Callbacks for Redirect flow
 window.myMSALObj
   .handleRedirectPromise()
-  .then(async (response: AuthenticationResult) => {
+  .then(async (response: AuthenticationResult | null) => {
     if (response) {
       await window.myMSALObj.setActiveAccount(response.account);
 
@@ -34,6 +35,6 @@ window.myMSALObj
 
 declare global {
   interface Window {
-    myMSALObj: any;
+    myMSALObj: PublicClientApplication;
   }
 }

@@ -15,9 +15,9 @@ type PageConfig = {
   import: () => void;
 };
 
-interface EventPayload {
+type EventPayload = {
   detail: unknown;
-}
+};
 
 @router
 export class MyProject extends LitElement {
